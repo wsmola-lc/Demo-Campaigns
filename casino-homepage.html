@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Golden Reel Casino</title>
+<style>
+  :root {
+    --bg-dark: #0b0d1a;
+    --bg-panel: #14172b;
+    --gold: #f2c14e;
+    --gold-dark: #b8912f;
+    --red: #e8433a;
+    --text-light: #f4f1ea;
+    --text-muted: #9a9db0;
+    font-family: 'Georgia', 'Times New Roman', serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: radial-gradient(circle at top, #1c1f3a 0%, var(--bg-dark) 70%);
+    color: var(--text-light);
+    min-height: 100vh;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: rgba(11, 13, 26, 0.85);
+    border-bottom: 1px solid var(--gold-dark);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .logo span { color: var(--red); }
+
+  nav a {
+    color: var(--text-light);
+    text-decoration: none;
+    margin: 0 16px;
+    font-size: 15px;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--gold); }
+
+  .login-trigger {
+    background: linear-gradient(180deg, var(--gold), var(--gold-dark));
+    color: #1a1a1a;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  .login-trigger:hover { filter: brightness(1.08); }
+
+  .hero {
+    text-align: center;
+    padding: 90px 20px 70px;
+    background: linear-gradient(180deg, rgba(242,193,78,0.06), transparent);
+  }
+  .hero h1 {
+    font-size: 48px;
+    margin-bottom: 12px;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(242,193,78,0.25);
+  }
+  .hero p {
+    color: var(--text-muted);
+    font-size: 18px;
+    max-width: 560px;
+    margin: 0 auto 30px;
+  }
+  .cta-btn {
+    background: var(--red);
+    color: #fff;
+    border: none;
+    padding: 14px 34px;
+    font-size: 17px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 6px 20px rgba(232,67,58,0.35);
+  }
+  .cta-btn:hover { filter: brightness(1.1); }
+
+  .games {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+  .game-card {
+    background: var(--bg-panel);
+    border: 1px solid rgba(242,193,78,0.15);
+    border-radius: 12px;
+    padding: 26px 18px;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .game-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold);
+  }
+  .game-icon { font-size: 40px; margin-bottom: 12px; }
+  .game-card h3 { margin: 8px 0 6px; color: var(--gold); font-size: 18px; }
+  .game-card p { color: var(--text-muted); font-size: 13px; margin: 0; }
+
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-muted);
+    font-size: 12px;
+    border-top: 1px solid rgba(242,193,78,0.1);
+  }
+  footer .disclaimer { max-width: 600px; margin: 0 auto 8px; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: var(--bg-panel);
+    border: 1px solid var(--gold-dark);
+    border-radius: 14px;
+    padding: 34px 30px;
+    width: 100%;
+    max-width: 360px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .modal h2 {
+    color: var(--gold);
+    margin-top: 0;
+    text-align: center;
+    font-size: 22px;
+  }
+  .modal label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    margin-top: 16px;
+  }
+  .modal input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #333756;
+    background: #0f1122;
+    color: var(--text-light);
+    font-size: 14px;
+  }
+  .modal input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .modal-submit {
+    width: 100%;
+    margin-top: 24px;
+    background: linear-gradient(180deg, var(--gold), var(--gold-dark));
+    color: #1a1a1a;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .modal-error {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+    display: none;
+  }
+  .modal-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 14px;
+    opacity: 0.7;
+  }
+
+  .status-banner {
+    display: none;
+    background: linear-gradient(90deg, rgba(242,193,78,0.15), transparent);
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div id="statusBanner" class="status-banner">🎉 Welcome back — VIP status active</div>
+
+<header>
+  <div class="logo">GOLDEN<span>REEL</span></div>
+  <nav>
+    <a href="#games">Games</a>
+    <a href="#promotions">Promotions</a>
+    <a href="#vip">VIP Club</a>
+    <a href="#support">Support</a>
+  </nav>
+  <button class="login-trigger" id="loginTriggerBtn">Log In</button>
+</header>
+
+<section class="hero">
+  <h1>Spin. Win. Repeat.</h1>
+  <p>Join Golden Reel Casino for slots, live tables, and jackpots. New players get a welcome bonus on their first deposit.</p>
+  <button class="cta-btn" id="heroLoginBtn">Log In to Play</button>
+</section>
+
+<section class="games" id="games">
+  <div class="game-card">
+    <div class="game-icon">🎰</div>
+    <h3>Slots</h3>
+    <p>Hundreds of themed slot machines with progressive jackpots.</p>
+  </div>
+  <div class="game-card">
+    <div class="game-icon">🃏</div>
+    <h3>Blackjack</h3>
+    <p>Classic table action against live dealers, 24/7.</p>
+  </div>
+  <div class="game-card">
+    <div class="game-icon">🎲</div>
+    <h3>Roulette</h3>
+    <p>American, European, and lightning roulette variants.</p>
+  </div>
+  <div class="game-card">
+    <div class="game-icon">🂡</div>
+    <h3>Poker</h3>
+    <p>Texas Hold'em tournaments and cash tables.</p>
+  </div>
+</section>
+
+<footer id="support">
+  <p class="disclaimer">This is a demo page for testing purposes only. No real money gambling occurs here. 18+. Please gamble responsibly.</p>
+  <p>&copy; 2026 Golden Reel Casino — Demo Build</p>
+</footer>
+
+<!-- Login Modal -->
+<div class="modal-overlay" id="loginOverlay">
+  <div class="modal">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <h2>Welcome Back</h2>
+    <form id="loginForm">
+      <label for="email">Email</label>
+      <input type="email" id="email" required placeholder="you@example.com">
+      <label for="password">Password</label>
+      <input type="password" id="password" required placeholder="••••••••">
+      <div class="modal-error" id="loginError">Invalid email or password. Please try again.</div>
+      <button type="submit" class="modal-submit">Log In</button>
+      <div class="modal-hint">Demo credentials: test@test.com / test</div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const overlay = document.getElementById('loginOverlay');
+  const openButtons = [document.getElementById('loginTriggerBtn'), document.getElementById('heroLoginBtn')];
+  const closeBtn = document.getElementById('closeModalBtn');
+  const form = document.getElementById('loginForm');
+  const errorMsg = document.getElementById('loginError');
+  const statusBanner = document.getElementById('statusBanner');
+
+  openButtons.forEach(btn => btn.addEventListener('click', () => {
+    overlay.classList.add('active');
+    errorMsg.style.display = 'none';
+  }));
+
+  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+
+    const VALID_EMAIL = 'test@test.com';
+    const VALID_PASSWORD = 'test';
+
+    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+      // Successful login: set LiveChat session variable
+      if (window.LiveChatWidget) {
+        LiveChatWidget.call("set_session_variables", {
+          "status": "VIP",
+        });
+      }
+
+      overlay.classList.remove('active');
+      statusBanner.style.display = 'block';
+      document.querySelectorAll('.login-trigger, #heroLoginBtn').forEach(btn => {
+        btn.textContent = 'VIP Account';
+      });
+      form.reset();
+    } else {
+      errorMsg.style.display = 'block';
+    }
+  });
+</script>
+
+<!-- Start of Text (www.text.com) code -->
+<script>
+    window.__lc = window.__lc || {};
+    window.__lc.organizationId = "d4831e30-b556-49cd-a0f9-2c8848e03161";
+    window.__lc.integration_name = "manual_onboarding";
+    window.__lc.product_name = "text";
+    ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[LiveChatWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.livechatinc.com/tracking.js",t.head.appendChild(n)}};!n.__lc.asyncInit&&e.init(),n.LiveChatWidget=n.LiveChatWidget||e}(window,document,[].slice))
+</script>
+<noscript><a href="https://www.text.com/chat-with-ai-agent/d4831e30-b556-49cd-a0f9-2c8848e03161/" rel="nofollow">Chat with AI Agent</a>, powered by <a href="https://www.text.com/" rel="noopener nofollow" target="_blank">Text</a></noscript>
+<!-- End of Text code -->
+
+</body>
+</html>
